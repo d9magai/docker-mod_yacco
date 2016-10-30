@@ -60,15 +60,15 @@ static const command_rec yacco_cmds[] =
         },
     };
 
-
 /* Dispatch list for API hooks */
-module AP_MODULE_DECLARE_DATA yacco_module = {
+module AP_MODULE_DECLARE_DATA yacco_module =
+    {
     STANDARD20_MODULE_STUFF,
-    NULL,                  /* create per-dir    config structures */
-    NULL,                  /* merge  per-dir    config structures */
-	create_per_server_config,                  /* create per-server config structures */
-    NULL,                  /* merge  per-server config structures */
-	yacco_cmds,                  /* table of config file commands       */
-    yacco_register_hooks   /* register hooks                      */
-};
+    NULL,                     /* create per-dir    config structures */
+    NULL,                     /* merge  per-dir    config structures */
+    create_per_server_config, /* create per-server config structures */
+    NULL,                     /* merge  per-server config structures */
+    yacco_cmds,               /* table of config file commands       */
+    yacco_register_hooks      /* register hooks                      */
+    };
 
