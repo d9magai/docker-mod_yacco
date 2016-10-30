@@ -11,9 +11,10 @@ extern "C" module AP_MODULE_DECLARE_DATA yacco_module;
 /* 設定情報の生成・初期化(追加) */
 static void *create_per_server_config(apr_pool_t *pool, server_rec *s)
 {
-	yacco_config *cfg = reinterpret_cast<yacco_config*>(apr_pcalloc(pool, sizeof(yacco_config)));
+    yacco_config *cfg = reinterpret_cast<yacco_config*>(apr_pcalloc(pool, sizeof(yacco_config)));
+
     // default value
-	cfg->sha256secretkey = nullptr;
+    cfg->sha256secretkey = nullptr;
     return cfg;
 }
 
@@ -44,10 +45,9 @@ static const char *set_sha256secretkey(cmd_parms *parms, void *mconfig, const ch
     }
 
     yacco_config *cfg = reinterpret_cast<yacco_config*>(ap_get_module_config(parms->server->module_config, &yacco_module));
-    cfg->sha256secretkey = std::make_shared<std::string>(arg);
+    cfg->sha256secretkey = std::make_shared < std::string > (arg);
     return NULL;
 }
-
 
 /* 設定情報フック定義(追加) */
 static const command_rec yacco_cmds[] =
