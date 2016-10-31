@@ -36,8 +36,6 @@ static int yacco_handler(request_rec *r)
     r->content_type = "text/html";
 
     yacco_config *conf = reinterpret_cast<yacco_config*>(ap_get_module_config(r->server->module_config, &yacco_module));
-    if (!r->header_only)
-        ap_rputs(conf->sha256secretkey->c_str(), r);
 
     try {
         Aws::SDKOptions options;
