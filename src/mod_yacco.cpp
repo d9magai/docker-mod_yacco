@@ -22,6 +22,8 @@ static void *create_per_server_config(apr_pool_t *pool, server_rec *s)
 
     // default value
     cfg->sha256secretkey = nullptr;
+    cfg->aws_accesskey_id = nullptr;
+    cfg->aws_secretaccess_key = nullptr;
     return cfg;
 }
 
@@ -61,11 +63,39 @@ static const char *set_sha256secretkey(cmd_parms *parms, void *mconfig, const ch
     return NULL;
 }
 
+static const char *set_aws_accesskey_id(cmd_parms *parms, void *mconfig, const char *arg)
+{
+    if (strlen(arg) == 0) {
+        return "aws accesskey id must be a string";
+    }
+
+    yacco_config *cfg = reinterpret_cast<yacco_config*>(ap_get_module_config(parms->server->module_config, &yacco_module));
+    cfg->aws_accesskey_id = std::make_shared < std::string > (arg);
+    return NULL;
+}
+
+static const char *set_aws_secretaccess_key(cmd_parms *parms, void *mconfig, const char *arg)
+{
+    if (strlen(arg) == 0) {
+        return "aws secretaccess ked must be a string";
+    }
+
+    yacco_config *cfg = reinterpret_cast<yacco_config*>(ap_get_module_config(parms->server->module_config, &yacco_module));
+    cfg->aws_secretaccess_key = std::make_shared < std::string > (arg);
+    return NULL;
+}
+
 /* 設定情報フック定義(追加) */
 static const command_rec yacco_cmds[] =
     {
         {
         "SHA256_SECRET_KEY", set_sha256secretkey, 0, RSRC_CONF, TAKE1, "sha256 secretkey"
+        },
+        {
+        "AWS_ACCESSKEY_ID", set_aws_accesskey_id, 0, RSRC_CONF, TAKE1, "aws accesskey id"
+        },
+        {
+        "AWS_SECRETACCESS_KEY", set_aws_secretaccess_key, 0, RSRC_CONF, TAKE1, "aws secretaccess key"
         },
         {
         0
