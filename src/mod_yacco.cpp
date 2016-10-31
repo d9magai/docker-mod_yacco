@@ -3,10 +3,15 @@
 #include <httpd.h>
 #include "http_config.h"
 #include <http_protocol.h>
+#include <http_log.h>
 #include <ap_config.h>
 #include "module_config_struct.h"
 
 extern "C" module AP_MODULE_DECLARE_DATA yacco_module;
+
+#ifdef APLOG_USE_MODULE
+APLOG_USE_MODULE(yacco);
+#endif
 
 const std::string HANDLER_NAME = "yacco";
 
