@@ -6,6 +6,12 @@
 #include <http_log.h>
 #include "module_config_struct.h"
 #include <aws/core/Aws.h>
+#undef OK
+#undef HTTP_VERSION_NOT_SUPPORTED
+#include <aws/s3/S3Client.h>
+#include <aws/s3/model/GetObjectRequest.h>
+#include <aws/core/auth/AWSCredentialsProvider.h>
+#include <aws/core/utils/StringUtils.h>
 
 extern "C" module AP_MODULE_DECLARE_DATA yacco_module;
 
