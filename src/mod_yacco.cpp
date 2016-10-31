@@ -4,7 +4,6 @@
 #include "http_config.h"
 #include <http_protocol.h>
 #include <http_log.h>
-#include <ap_config.h>
 #include "module_config_struct.h"
 #include <aws/core/Aws.h>
 
