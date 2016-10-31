@@ -8,6 +8,8 @@
 
 extern "C" module AP_MODULE_DECLARE_DATA yacco_module;
 
+const std::string HANDLER_NAME = "yacco";
+
 /* 設定情報の生成・初期化(追加) */
 static void *create_per_server_config(apr_pool_t *pool, server_rec *s)
 {
@@ -21,7 +23,7 @@ static void *create_per_server_config(apr_pool_t *pool, server_rec *s)
 /* The sample content handler */
 static int yacco_handler(request_rec *r)
 {
-    if (strcmp(r->handler, "yacco")) {
+    if (strcmp(r->handler, HANDLER_NAME.c_str())) {
         return DECLINED;
     }
     r->content_type = "text/html";
