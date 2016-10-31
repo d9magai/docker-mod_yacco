@@ -6,6 +6,7 @@
 #include <http_log.h>
 #include <ap_config.h>
 #include "module_config_struct.h"
+#include <aws/core/Aws.h>
 
 extern "C" module AP_MODULE_DECLARE_DATA yacco_module;
 
@@ -39,10 +40,18 @@ static int yacco_handler(request_rec *r)
     if (!r->header_only)
         ap_rputs(conf->sha256secretkey->c_str(), r);
 
-    std::string path = std::string(r->uri).substr(HANDLER_NAME.length() + 2);
-    int slashpos = path.find_first_of('/');
-    std::string bucket = path.substr(0, slashpos);
-    std::string objectkey = path.substr(slashpos + 1);
+    try {
+        Aws::SDKOptions options;
+        Aws::InitAPI(options);
+
+        std::string path = std::string(r->uri).substr(HANDLER_NAME.length() + 2);
+        int slashpos = path.find_first_of('/');
+        std::string bucket = path.substr(0, slashpos);
+        std::string objectkey = path.substr(slashpos + 1);
+    } catch (const std::exception &e) {
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, APLOG_MODULE_INDEX, r, e.what());
+        return HTTP_INTERNAL_SERVER_ERROR;
+    }
 
     return OK;
 }

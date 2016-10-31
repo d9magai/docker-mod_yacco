@@ -29,11 +29,11 @@ all: mod_yacco.so
 
 # compile
 mod_yacco.o: mod_yacco.cpp
-	g++ -c -fPIC -std=c++11 -I$(APXS_INCLUDEDIR) -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -Wall -o $@ $< 
+	g++ -c -fPIC -std=c++11 -I$(APXS_INCLUDEDIR) -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $< 
 
 # link
 mod_yacco.so: mod_yacco.o 
-	g++ -fPIC -shared -o $@ $< $(APXS_LIBS_SHLIB)
+	g++ -fPIC -shared -o $@ $< $(APXS_LIBS_SHLIB) -L/opt/awssdkcpp/lib/ -laws-cpp-sdk-core -laws-cpp-sdk-s3
 
 # install the shared object file into Apache 
 install: all
