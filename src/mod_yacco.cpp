@@ -32,6 +32,11 @@ static int yacco_handler(request_rec *r)
     if (!r->header_only)
         ap_rputs(conf->sha256secretkey->c_str(), r);
 
+    std::string path = std::string(r->uri).substr(HANDLER_NAME.length() + 2);
+    int slashpos = path.find_first_of('/');
+    std::string bucket = path.substr(0, slashpos);
+    std::string objectkey = path.substr(slashpos + 1);
+
     return OK;
 }
 
