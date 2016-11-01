@@ -48,28 +48,7 @@ static int yacko_handler(request_rec *r)
         Aws::SDKOptions options;
         Aws::InitAPI(options);
 
-        std::string datas = Yacko::getS3Object(r, std::string(r->uri));
-
-        std::string path = std::string(r->uri).substr(HANDLER_NAME.length() + 2);
-        int slashpos = path.find_first_of('/');
-        std::string bucket = path.substr(0, slashpos);
-        std::string objectkey = path.substr(slashpos + 1);
-
-        std::shared_ptr<Aws::S3::S3Client> s3client = Yacko::getS3Client(r);
-        Aws::S3::Model::GetObjectRequest getObjectRequest;
-        getObjectRequest.SetBucket(bucket.c_str());
-        getObjectRequest.SetKey(objectkey.c_str());
-
-        auto getObjectOutcome = s3client->GetObject(getObjectRequest);
-        if (!getObjectOutcome.IsSuccess()) {
-            std::stringstream ss;
-            ss << "File download failed from s3 with error " << getObjectOutcome.GetError().GetMessage();
-            throw Yacko::internal_server_error(ss.str());
-        }
-
-        std::stringstream ss;
-        ss << getObjectOutcome.GetResult().GetBody().rdbuf();
-        std::string data(ss.str());
+        std::string data = Yacko::getS3Object(r, std::string(r->uri));
 
         apr_bucket *b = apr_bucket_pool_create(data.c_str(), data.length(), r->pool, r->connection->bucket_alloc);
         apr_bucket_brigade *bucket_brigate = apr_brigade_create(r->pool, r->connection->bucket_alloc);
