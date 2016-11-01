@@ -34,6 +34,10 @@ static void *create_per_server_config(apr_pool_t *pool, server_rec *s)
     cfg->aws_accesskey_id = nullptr;
     cfg->aws_secretaccess_key = nullptr;
     cfg->s3client = nullptr;
+
+    Aws::SDKOptions options;
+    Aws::InitAPI(options);
+
     return cfg;
 }
 
@@ -45,9 +49,6 @@ static int yacko_handler(request_rec *r)
     }
 
     try {
-        Aws::SDKOptions options;
-        Aws::InitAPI(options);
-
         std::string data = Yacko::getS3Object(r);
 
         apr_bucket *bucket = apr_bucket_pool_create(data.c_str(), data.length(), r->pool, r->connection->bucket_alloc);
