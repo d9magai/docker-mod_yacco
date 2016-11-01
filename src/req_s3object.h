@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <map>
 #include <httpd.h>
 #undef OK
 #undef HTTP_VERSION_NOT_SUPPORTED
@@ -22,6 +23,8 @@ namespace Yacko {
         std::string getS3Object(request_rec *r);
 
         std::shared_ptr<Aws::S3::S3Client> getS3Client(request_rec *r);
+
+        std::map<std::string, std::string> parseUri(std::string uri);
     }
 }
 

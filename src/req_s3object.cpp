@@ -4,16 +4,12 @@ namespace Yacko {
 
     std::string getS3Object(request_rec *r)
     {
-        std::string uri(r->uri);
-        std::string path = std::string(uri).substr(Yacko::HANDLER_NAME.length() + 2);
-        int slashpos = path.find_first_of('/');
-        std::string bucket = path.substr(0, slashpos);
-        std::string objectkey = path.substr(slashpos + 1);
+        std::map<std::string, std::string> map = Yacko::parseUri(std::string(r->uri));
 
         std::shared_ptr < Aws::S3::S3Client > s3client = Yacko::getS3Client(r);
         Aws::S3::Model::GetObjectRequest getObjectRequest;
-        getObjectRequest.SetBucket(bucket.c_str());
-        getObjectRequest.SetKey(objectkey.c_str());
+        getObjectRequest.SetBucket(map["bucket"].c_str());
+        getObjectRequest.SetKey(map["objectkey"].c_str());
 
         auto getObjectOutcome = s3client->GetObject(getObjectRequest);
         if (!getObjectOutcome.IsSuccess()) {
@@ -47,4 +43,17 @@ namespace Yacko {
         }
         return conf->s3client;
     }
+
+    std::map<std::string, std::string> parseUri(std::string uri)
+    {
+        std::string path = std::string(uri).substr(Yacko::HANDLER_NAME.length() + 2);
+        int slashpos = path.find_first_of('/');
+
+        std::map<std::string, std::string> map;
+        map["bucket"] = path.substr(0, slashpos);
+        map["objectkey"] = path.substr(slashpos + 1);
+
+        return map;
+    }
+
 }
