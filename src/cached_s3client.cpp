@@ -18,7 +18,7 @@ std::shared_ptr<Aws::S3::S3Client> getS3Client(request_rec *r)
 
     conf->s3client = Aws::MakeShared<Aws::S3::S3Client>(ALLOCATION_TAG, Aws::Auth::AWSCredentials(*(conf->aws_accesskey_id), *(conf->aws_secretaccess_key)), config);
     if(!(conf->s3client)) {
-        throw yacko::internal_server_error("init S3Client failed");
+        throw Yacko::internal_server_error("init S3Client failed");
     }
     return conf->s3client;
 }

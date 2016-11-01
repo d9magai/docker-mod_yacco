@@ -4,7 +4,7 @@
 #include <memory>
 #include <exception>
 
-namespace yacko {
+namespace Yacko {
 
 class bad_request: public std::runtime_error {
 public:
