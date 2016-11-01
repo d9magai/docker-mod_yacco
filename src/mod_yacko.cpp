@@ -9,6 +9,7 @@
 #include "req_s3object.h"
 #include "module_config_struct.h"
 #include "serverexception.h"
+#include "common.h"
 #include <aws/core/Aws.h>
 #include <aws/s3/S3Client.h>
 #include <aws/s3/model/GetObjectRequest.h>
@@ -20,8 +21,6 @@ extern "C" module AP_MODULE_DECLARE_DATA yacko_module;
 #ifdef APLOG_USE_MODULE
 APLOG_USE_MODULE(yacko);
 #endif
-
-const std::string HANDLER_NAME = "yacko";
 
 /* 設定情報の生成・初期化(追加) */
 static void *create_per_server_config(apr_pool_t *pool, server_rec *s)
@@ -43,7 +42,7 @@ static void *create_per_server_config(apr_pool_t *pool, server_rec *s)
 /* The sample content handler */
 static int yacko_handler(request_rec *r)
 {
-    if (strcmp(r->handler, HANDLER_NAME.c_str())) {
+    if (strcmp(r->handler, Yacko::HANDLER_NAME.c_str())) {
         return DECLINED;
     }
 

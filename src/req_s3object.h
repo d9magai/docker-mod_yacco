@@ -7,6 +7,7 @@
 #include "http_config.h"
 #include "module_config_struct.h"
 #include "serverexception.h"
+#include "common.h"
 #include <aws/s3/S3Client.h>
 #include <aws/s3/model/GetObjectRequest.h>
 #include <aws/core/auth/AWSCredentialsProvider.h>
