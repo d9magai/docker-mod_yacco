@@ -7,6 +7,7 @@
 #include <http_protocol.h>
 #include <http_log.h>
 #include "cached_s3client.h"
+#include "req_s3object.h"
 #include "module_config_struct.h"
 #include "serverexception.h"
 #include <aws/core/Aws.h>
@@ -46,6 +47,8 @@ static int yacko_handler(request_rec *r)
     try {
         Aws::SDKOptions options;
         Aws::InitAPI(options);
+
+        std::string datas = Yacko::getS3Object(r, std::string(r->uri));
 
         std::string path = std::string(r->uri).substr(HANDLER_NAME.length() + 2);
         int slashpos = path.find_first_of('/');
