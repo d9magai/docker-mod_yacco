@@ -7,6 +7,7 @@
 #include <http_protocol.h>
 #include <http_log.h>
 #include "module_config_struct.h"
+#include "serverexception.h"
 #include <aws/core/Aws.h>
 #include <aws/s3/S3Client.h>
 #include <aws/s3/model/GetObjectRequest.h>
@@ -68,7 +69,7 @@ static int yacko_handler(request_rec *r)
         if (!getObjectOutcome.IsSuccess()) {
             std::stringstream ss;
             ss << "File download failed from s3 with error " << getObjectOutcome.GetError().GetMessage();
-            throw std::runtime_error(ss.str());
+            throw yacko::internal_server_error(ss.str());
         }
 
         std::stringstream ss;
@@ -82,7 +83,13 @@ static int yacko_handler(request_rec *r)
         ap_set_content_length(r, data.length());
         ap_pass_brigade(r->output_filters, bucket_brigate);
 
-    } catch (const std::exception &e) {
+    } catch (const yacko::bad_request& e) {
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, APLOG_MODULE_INDEX, r, e.what());
+        return HTTP_BAD_REQUEST;
+    } catch (const yacko::internal_server_error& e) {
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, APLOG_MODULE_INDEX, r, e.what());
+        return HTTP_INTERNAL_SERVER_ERROR;
+    } catch (const std::exception& e) {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, APLOG_MODULE_INDEX, r, e.what());
         return HTTP_INTERNAL_SERVER_ERROR;
     }
