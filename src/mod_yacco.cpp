@@ -56,7 +56,7 @@ static int yacco_handler(request_rec *r)
         return HTTP_INTERNAL_SERVER_ERROR;
     }
 
-    return OK;
+    return 0;//OK;
 }
 
 static void yacco_register_hooks(apr_pool_t *p)
