@@ -42,9 +42,6 @@ static int yacko_handler(request_rec *r)
     if (strcmp(r->handler, HANDLER_NAME.c_str())) {
         return DECLINED;
     }
-    r->content_type = "text/html";
-
-    yacko_config *conf = reinterpret_cast<yacko_config*>(ap_get_module_config(r->server->module_config, &yacko_module));
 
     try {
         Aws::SDKOptions options;
