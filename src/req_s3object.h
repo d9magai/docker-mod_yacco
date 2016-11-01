@@ -15,8 +15,8 @@
 extern "C" module AP_MODULE_DECLARE_DATA yacko_module;
 
 namespace Yacko {
-extern "C" {
-std::string getS3Object(request_rec *r);
-}
+    extern "C" {
+        std::string getS3Object(request_rec *r);
+    }
 }
 
