@@ -6,7 +6,6 @@
 #undef HTTP_VERSION_NOT_SUPPORTED
 #include <http_protocol.h>
 #include <http_log.h>
-#include "cached_s3client.h"
 #include "req_s3object.h"
 #include "module_config_struct.h"
 #include "serverexception.h"

@@ -20,7 +20,7 @@ APXS_LDFLAGS_SHLIB=`$(APXS) -q LDFLAGS_SHLIB`
 APXS_SYSCONFDIR=`$(APXS) -q SYSCONFDIR`
 APXS_LIBS_SHLIB=`$(APXS) -q LIBS_SHLIB`
 
-OBJ = mod_yacko.o cached_s3client.o req_s3object.o
+OBJ = mod_yacko.o req_s3object.o
 
 #   the default target
 all: mod_yacko.so
@@ -32,13 +32,11 @@ all: mod_yacko.so
 # compile
 mod_yacko.o: mod_yacko.cpp
 	g++ -c -fPIC -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $<
-cached_s3client.o: cached_s3client.cpp
-	g++ -c -fPIC -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $< 
 req_s3object.o: req_s3object.cpp
 	g++ -c -fPIC -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $< 
 
 # link
-mod_yacko.so: mod_yacko.o cached_s3client.o req_s3object.o
+mod_yacko.so: mod_yacko.o req_s3object.o
 	g++ -fPIC -shared -o $@ $(OBJ) $(APXS_LIBS_SHLIB) -L/opt/awssdkcpp/lib/ -laws-cpp-sdk-core -laws-cpp-sdk-s3
 
 # install the shared object file into Apache 
