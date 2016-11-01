@@ -82,7 +82,9 @@ static const char *set_aws_accesskey_id(cmd_parms *parms, void *mconfig, const c
     }
 
     yacco_config *cfg = reinterpret_cast<yacco_config*>(ap_get_module_config(parms->server->module_config, &yacco_module));
-    cfg->aws_accesskey_id = std::make_shared < std::string > (arg);
+    Aws::StringStream ass;
+    ass << arg;
+    cfg->aws_accesskey_id = std::make_shared < Aws::String > (ass.str());
     return NULL;
 }
 
@@ -93,7 +95,9 @@ static const char *set_aws_secretaccess_key(cmd_parms *parms, void *mconfig, con
     }
 
     yacco_config *cfg = reinterpret_cast<yacco_config*>(ap_get_module_config(parms->server->module_config, &yacco_module));
-    cfg->aws_secretaccess_key = std::make_shared < std::string > (arg);
+    Aws::StringStream ass;
+    ass << arg;
+    cfg->aws_secretaccess_key = std::make_shared < Aws::String > (ass.str());
     return NULL;
 }
 
