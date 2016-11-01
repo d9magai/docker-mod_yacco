@@ -51,6 +51,36 @@ static int yacco_handler(request_rec *r)
         int slashpos = path.find_first_of('/');
         std::string bucket = path.substr(0, slashpos);
         std::string objectkey = path.substr(slashpos + 1);
+
+        Aws::Client::ClientConfiguration config;
+        config.scheme = Aws::Http::Scheme::HTTPS;
+        config.connectTimeoutMs = 30000;
+        config.requestTimeoutMs = 30000;
+        config.region = Aws::Region::AP_NORTHEAST_1;
+
+        Aws::S3::S3Client s3Client(Aws::Auth::AWSCredentials(*(conf->aws_accesskey_id), *(conf->aws_secretaccess_key)), config);
+        Aws::S3::Model::GetObjectRequest getObjectRequest;
+        getObjectRequest.SetBucket(bucket.c_str());
+        getObjectRequest.SetKey(objectkey.c_str());
+
+        auto getObjectOutcome = s3Client.GetObject(getObjectRequest);
+        if (!getObjectOutcome.IsSuccess()) {
+            std::stringstream ss;
+            ss << "File download failed from s3 with error " << getObjectOutcome.GetError().GetMessage();
+            throw std::runtime_error(ss.str());
+        }
+
+        std::stringstream ss;
+        ss << getObjectOutcome.GetResult().GetBody().rdbuf();
+        std::string data(ss.str());
+
+        apr_bucket *b = apr_bucket_pool_create(data.c_str(), data.length(), r->pool, r->connection->bucket_alloc);
+        apr_bucket_brigade *bucket_brigate = apr_brigade_create(r->pool, r->connection->bucket_alloc);
+        APR_BRIGADE_INSERT_TAIL(bucket_brigate, b);
+        ap_set_content_type(r, "image/jpg");
+        ap_set_content_length(r, data.length());
+        ap_pass_brigade(r->output_filters, bucket_brigate);
+
     } catch (const std::exception &e) {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, APLOG_MODULE_INDEX, r, e.what());
         return HTTP_INTERNAL_SERVER_ERROR;
