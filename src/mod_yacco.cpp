@@ -30,6 +30,7 @@ static void *create_per_server_config(apr_pool_t *pool, server_rec *s)
     cfg->sha256secretkey = nullptr;
     cfg->aws_accesskey_id = nullptr;
     cfg->aws_secretaccess_key = nullptr;
+    cfg->s3Client = nullptr;
     return cfg;
 }
 
