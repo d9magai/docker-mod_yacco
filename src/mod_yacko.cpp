@@ -55,7 +55,7 @@ static int yacko_handler(request_rec *r)
         std::string bucket = path.substr(0, slashpos);
         std::string objectkey = path.substr(slashpos + 1);
 
-        std::shared_ptr<Aws::S3::S3Client> s3client = getS3Client(r);
+        std::shared_ptr<Aws::S3::S3Client> s3client = Yacko::getS3Client(r);
         Aws::S3::Model::GetObjectRequest getObjectRequest;
         getObjectRequest.SetBucket(bucket.c_str());
         getObjectRequest.SetKey(objectkey.c_str());

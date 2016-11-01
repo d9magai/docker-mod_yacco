@@ -1,5 +1,7 @@
 #include "cached_s3client.h"
 
+namespace Yacko {
+
 std::shared_ptr<Aws::S3::S3Client> getS3Client(request_rec *r)
 {
 
@@ -19,5 +21,7 @@ std::shared_ptr<Aws::S3::S3Client> getS3Client(request_rec *r)
         throw yacko::internal_server_error("init S3Client failed");
     }
     return conf->s3client;
+}
+
 }
 
