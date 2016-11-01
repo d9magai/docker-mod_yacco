@@ -12,9 +12,9 @@
 
 extern "C" module AP_MODULE_DECLARE_DATA yacko_module;
 
-static const char* ALLOCATION_TAG = "yacko";
 
 namespace Yacko {
+static const char* const ALLOCATION_TAG = "yacko";
 extern "C" {
 std::shared_ptr<Aws::S3::S3Client> getS3Client(request_rec *r);
 }
