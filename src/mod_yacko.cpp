@@ -50,9 +50,9 @@ static int yacko_handler(request_rec *r)
 
         std::string data = Yacko::getS3Object(r, std::string(r->uri));
 
-        apr_bucket *b = apr_bucket_pool_create(data.c_str(), data.length(), r->pool, r->connection->bucket_alloc);
+        apr_bucket *bucket = apr_bucket_pool_create(data.c_str(), data.length(), r->pool, r->connection->bucket_alloc);
         apr_bucket_brigade *bucket_brigate = apr_brigade_create(r->pool, r->connection->bucket_alloc);
-        APR_BRIGADE_INSERT_TAIL(bucket_brigate, b);
+        APR_BRIGADE_INSERT_TAIL(bucket_brigate, bucket);
         ap_set_content_type(r, "image/jpg");
         ap_set_content_length(r, data.length());
         ap_pass_brigade(r->output_filters, bucket_brigate);
