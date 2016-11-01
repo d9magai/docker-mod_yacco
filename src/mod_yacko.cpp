@@ -48,7 +48,7 @@ static int yacko_handler(request_rec *r)
         Aws::SDKOptions options;
         Aws::InitAPI(options);
 
-        std::string data = Yacko::getS3Object(r, std::string(r->uri));
+        std::string data = Yacko::getS3Object(r);
 
         apr_bucket *bucket = apr_bucket_pool_create(data.c_str(), data.length(), r->pool, r->connection->bucket_alloc);
         apr_bucket_brigade *bucket_brigate = apr_brigade_create(r->pool, r->connection->bucket_alloc);

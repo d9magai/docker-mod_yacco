@@ -2,8 +2,9 @@
 
 namespace Yacko {
 
-std::string getS3Object(request_rec *r, std::string uri)
+std::string getS3Object(request_rec *r)
 {
+    std::string uri(r->uri);
     std::string handler_name = "yacko";
     std::string path = std::string(uri).substr(handler_name.length() + 2);
     int slashpos = path.find_first_of('/');
