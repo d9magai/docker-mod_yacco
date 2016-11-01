@@ -6,6 +6,7 @@
 #undef HTTP_VERSION_NOT_SUPPORTED
 #include <http_protocol.h>
 #include <http_log.h>
+#include "cached_s3client.h"
 #include "module_config_struct.h"
 #include "serverexception.h"
 #include <aws/core/Aws.h>
@@ -54,18 +55,12 @@ static int yacko_handler(request_rec *r)
         std::string bucket = path.substr(0, slashpos);
         std::string objectkey = path.substr(slashpos + 1);
 
-        Aws::Client::ClientConfiguration config;
-        config.scheme = Aws::Http::Scheme::HTTPS;
-        config.connectTimeoutMs = 30000;
-        config.requestTimeoutMs = 30000;
-        config.region = Aws::Region::AP_NORTHEAST_1;
-
-        Aws::S3::S3Client s3Client(Aws::Auth::AWSCredentials(*(conf->aws_accesskey_id), *(conf->aws_secretaccess_key)), config);
+        std::shared_ptr<Aws::S3::S3Client> s3client = getS3Client(r);
         Aws::S3::Model::GetObjectRequest getObjectRequest;
         getObjectRequest.SetBucket(bucket.c_str());
         getObjectRequest.SetKey(objectkey.c_str());
 
-        auto getObjectOutcome = s3Client.GetObject(getObjectRequest);
+        auto getObjectOutcome = s3client->GetObject(getObjectRequest);
         if (!getObjectOutcome.IsSuccess()) {
             std::stringstream ss;
             ss << "File download failed from s3 with error " << getObjectOutcome.GetError().GetMessage();
