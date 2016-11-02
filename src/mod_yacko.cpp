@@ -40,7 +40,8 @@ static int yacko_handler(request_rec *r)
     }
 
     try {
-        std::string data = Yacko::S3::getObject(r);
+        std::map<std::string, std::string> map = Yacko::Utils::parseUri(std::string(r->uri));
+        std::string data = Yacko::S3::getObject(r, map["bucket"], map["objectkey"]);
 
         apr_bucket *bucket = apr_bucket_pool_create(data.c_str(), data.length(), r->pool, r->connection->bucket_alloc);
         apr_bucket_brigade *bucket_brigate = apr_brigade_create(r->pool, r->connection->bucket_alloc);

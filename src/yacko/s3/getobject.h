@@ -22,7 +22,7 @@ namespace Yacko {
         static const char* const ALLOCATION_TAG = "yacko";
 
         extern "C" {
-            std::string getObject(request_rec *r);
+            std::string getObject(request_rec *r, std::string bucket, std::string objectkey);
 
             std::shared_ptr<Aws::S3::S3Client> getS3Client(request_rec *r);
 

@@ -3,13 +3,12 @@
 namespace Yacko {
     namespace S3 {
 
-        std::string getObject(request_rec *r)
+        std::string getObject(request_rec *r, std::string bucket, std::string objectkey)
         {
 
-            std::map<std::string, std::string> map = Yacko::S3::parseUri(std::string(r->uri));
             Aws::S3::Model::GetObjectRequest getObjectRequest;
-            getObjectRequest.SetBucket(map["bucket"].c_str());
-            getObjectRequest.SetKey(map["objectkey"].c_str());
+            getObjectRequest.SetBucket(bucket.c_str());
+            getObjectRequest.SetKey(objectkey.c_str());
 
             auto getObjectOutcome = Yacko::S3::getS3Client(r)->GetObject(getObjectRequest);
             if (!getObjectOutcome.IsSuccess()) {
