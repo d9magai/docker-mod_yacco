@@ -9,6 +9,7 @@
 #include "module_config_struct.h"
 #include "serverexception.h"
 #include "common.h"
+#include "yacko/utils/stringutils.h"
 #include <aws/s3/S3Client.h>
 #include <aws/s3/model/GetObjectRequest.h>
 #include <aws/core/auth/AWSCredentialsProvider.h>
