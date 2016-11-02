@@ -5,13 +5,11 @@ namespace Yacko {
     std::string getS3Object(request_rec *r)
     {
         std::map<std::string, std::string> map = Yacko::parseUri(std::string(r->uri));
-
-        std::shared_ptr < Aws::S3::S3Client > s3client = Yacko::getS3Client(r);
         Aws::S3::Model::GetObjectRequest getObjectRequest;
         getObjectRequest.SetBucket(map["bucket"].c_str());
         getObjectRequest.SetKey(map["objectkey"].c_str());
 
-        auto getObjectOutcome = s3client->GetObject(getObjectRequest);
+        auto getObjectOutcome = Yacko::getS3Client(r)->GetObject(getObjectRequest);
         if (!getObjectOutcome.IsSuccess()) {
             std::string message = "File download failed from s3 with error: " + Yacko::Utils::as2s(getObjectOutcome.GetError().GetMessage());
             throw Yacko::internal_server_error(message);
