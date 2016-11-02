@@ -6,6 +6,7 @@
 #include "module_config_struct.h"
 #include "serverexception.h"
 #include "common.h"
+#include "yacko/utils/stringutils.h"
 #include <aws/core/Aws.h>
 
 extern "C" module AP_MODULE_DECLARE_DATA yacko_module;
@@ -85,9 +86,7 @@ static const char *set_aws_accesskey_id(cmd_parms *parms, void *mconfig, const c
     }
 
     yacko_config *cfg = reinterpret_cast<yacko_config*>(ap_get_module_config(parms->server->module_config, &yacko_module));
-    Aws::StringStream ass;
-    ass << arg;
-    cfg->aws_accesskey_id = std::make_shared < Aws::String > (ass.str());
+    cfg->aws_accesskey_id = std::make_shared < Aws::String > (Yacko::Utils::buf2as(arg));
     return NULL;
 }
 
@@ -98,9 +97,7 @@ static const char *set_aws_secretaccess_key(cmd_parms *parms, void *mconfig, con
     }
 
     yacko_config *cfg = reinterpret_cast<yacko_config*>(ap_get_module_config(parms->server->module_config, &yacko_module));
-    Aws::StringStream ass;
-    ass << arg;
-    cfg->aws_secretaccess_key = std::make_shared < Aws::String > (ass.str());
+    cfg->aws_secretaccess_key = std::make_shared < Aws::String > (Yacko::Utils::buf2as(arg));
     return NULL;
 }
 
