@@ -30,6 +30,18 @@ namespace Yacko {
             ss << as;
             return ss.str();
         }
+
+        std::map<std::string, std::string> parseUri(std::string uri)
+        {
+
+            std::string path = std::string(uri).substr(Yacko::HANDLER_NAME.length() + 2);
+            int slashpos = path.find_first_of('/');
+            std::map<std::string, std::string> map;
+            map["bucket"] = path.substr(0, slashpos);
+            map["objectkey"] = path.substr(slashpos + 1);
+
+            return map;
+        }
     }
 }
 
