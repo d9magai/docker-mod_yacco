@@ -1,9 +1,5 @@
-#include <sstream>
-#include <memory>
 #include <httpd.h>
 #include "http_config.h"
-#undef OK
-#undef HTTP_VERSION_NOT_SUPPORTED
 #include <http_protocol.h>
 #include <http_log.h>
 #include "req_s3object.h"
@@ -11,10 +7,6 @@
 #include "serverexception.h"
 #include "common.h"
 #include <aws/core/Aws.h>
-#include <aws/s3/S3Client.h>
-#include <aws/s3/model/GetObjectRequest.h>
-#include <aws/core/auth/AWSCredentialsProvider.h>
-#include <aws/core/utils/StringUtils.h>
 
 extern "C" module AP_MODULE_DECLARE_DATA yacko_module;
 
