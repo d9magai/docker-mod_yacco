@@ -2,7 +2,7 @@
 #include "http_config.h"
 #include <http_protocol.h>
 #include <http_log.h>
-#include "req_s3object.h"
+#include "yacko/s3/getobject.h"
 #include "module_config_struct.h"
 #include "serverexception.h"
 #include "common.h"
@@ -40,7 +40,7 @@ static int yacko_handler(request_rec *r)
     }
 
     try {
-        std::string data = Yacko::getS3Object(r);
+        std::string data = Yacko::S3::getObject(r);
 
         apr_bucket *bucket = apr_bucket_pool_create(data.c_str(), data.length(), r->pool, r->connection->bucket_alloc);
         apr_bucket_brigade *bucket_brigate = apr_brigade_create(r->pool, r->connection->bucket_alloc);
