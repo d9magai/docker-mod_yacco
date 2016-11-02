@@ -17,15 +17,17 @@
 extern "C" module AP_MODULE_DECLARE_DATA yacko_module;
 
 namespace Yacko {
+    namespace S3 {
 
-    static const char* const ALLOCATION_TAG = "yacko";
+        static const char* const ALLOCATION_TAG = "yacko";
 
-    extern "C" {
-        std::string getS3Object(request_rec *r);
+        extern "C" {
+            std::string getObject(request_rec *r);
 
-        std::shared_ptr<Aws::S3::S3Client> getS3Client(request_rec *r);
+            std::shared_ptr<Aws::S3::S3Client> getS3Client(request_rec *r);
 
-        std::map<std::string, std::string> parseUri(std::string uri);
+            std::map<std::string, std::string> parseUri(std::string uri);
+        }
     }
 }
 
