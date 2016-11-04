@@ -42,6 +42,34 @@ namespace Yacko {
 
             return map;
         }
+
+        std::map<std::string, std::string> parseArgs(std::string args)
+        {
+
+            std::map<std::string, std::string> map;
+
+            std::vector<std::string> v;
+            std::stringstream ss(args.substr(1));
+            std::string buffer;
+            while(std::getline(ss, buffer, '&')) {
+                v.push_back(buffer);
+            }
+            for (auto x: v) {
+                std::string buf;
+                std::string key;
+                std::stringstream s(x);
+                while(std::getline(s, buf, '=')) {
+                    if (key == "") {
+                        key = buf;
+                    } else {
+                        map[key] = buf;
+                        key = "";
+                    }
+                }
+            }
+
+            return map;
+        }
     }
 }
 
