@@ -23,3 +23,10 @@ TEST_CASE("buf2s Test", "[utils][stringutils]") {
     CHECK("hoge" == Yacko::Utils::buf2s(ss.rdbuf()));
 }
 
+TEST_CASE("as2s Test", "[utils][stringutils]") {
+
+    Aws::String as("hoge");
+    std::string s("hoge");
+    CHECK(s == Yacko::Utils::as2s(as));
+}
+
