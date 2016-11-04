@@ -47,6 +47,17 @@ namespace Yacko {
 
             return map;
         }
+
+        std::string sha256(std::basic_string<unsigned char> str)
+        {
+            unsigned char hash[SHA256_DIGEST_LENGTH];
+            SHA256(str.c_str(), str.length(), hash);
+            std::stringstream ss;
+            for (size_t i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+                ss <<  std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(hash[i]);
+            }
+            return ss.str();
+        }
     }
 }
 
