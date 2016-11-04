@@ -4,7 +4,7 @@
 #include <http_log.h>
 #include "yacko/s3/getobject.h"
 #include "module_config_struct.h"
-#include "serverexception.h"
+#include "yacko/serverexception.h"
 #include "common.h"
 #include "yacko/utils/stringutils.h"
 #include <aws/core/Aws.h>

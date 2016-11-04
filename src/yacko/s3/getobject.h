@@ -7,7 +7,7 @@
 #undef HTTP_VERSION_NOT_SUPPORTED
 #include "http_config.h"
 #include "module_config_struct.h"
-#include "serverexception.h"
+#include "yacko/serverexception.h"
 #include "common.h"
 #include "yacko/utils/stringutils.h"
 #include <aws/s3/S3Client.h>
