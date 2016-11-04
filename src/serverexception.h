@@ -6,16 +6,16 @@
 
 namespace Yacko {
 
-class bad_request: public std::runtime_error {
+class BAD_REQUEST: public std::runtime_error {
 public:
-    explicit bad_request(const std::string& s) :
+    explicit BAD_REQUEST(const std::string& s) :
             std::runtime_error(s) {
     }
 };
 
-class internal_server_error: public std::runtime_error {
+class INTERNAL_SERVER_ERROR: public std::runtime_error {
 public:
-    explicit internal_server_error(const std::string& s) :
+    explicit INTERNAL_SERVER_ERROR(const std::string& s) :
             std::runtime_error(s) {
     }
 };

@@ -44,7 +44,7 @@ static int yacko_handler(request_rec *r)
         std::map<std::string, std::string> map = Yacko::Utils::parseUri(std::string(r->uri));
         std::map<std::string, std::string> params = Yacko::Utils::parseArgs(std::string(r->args));
         if (Yacko::Utils::sha256(map["bucket"] + map["objectkey"] + *(conf->sha256secretkey)) != params["checksum"]) {
-            throw Yacko::bad_request("invalid checksum");
+            throw Yacko::BAD_REQUEST("invalid checksum");
         }
         std::string data = Yacko::S3::getObject(r, map["bucket"], map["objectkey"]);
 
@@ -55,10 +55,10 @@ static int yacko_handler(request_rec *r)
         ap_set_content_length(r, data.length());
         ap_pass_brigade(r->output_filters, bucket_brigate);
 
-    } catch (const Yacko::bad_request& e) {
+    } catch (const Yacko::BAD_REQUEST& e) {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, APLOG_MODULE_INDEX, r, e.what());
         return HTTP_BAD_REQUEST;
-    } catch (const Yacko::internal_server_error& e) {
+    } catch (const Yacko::INTERNAL_SERVER_ERROR& e) {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, APLOG_MODULE_INDEX, r, e.what());
         return HTTP_INTERNAL_SERVER_ERROR;
     } catch (const std::exception& e) {
