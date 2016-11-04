@@ -33,7 +33,7 @@ namespace Yacko {
         {
 
             std::map<std::string, std::string> map;
-            std::stringstream querystringss(args.substr(1));
+            std::stringstream querystringss(args);
             std::string param;
             while(std::getline(querystringss, param, '&')) {
                 std::string buf;
