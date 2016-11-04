@@ -17,3 +17,16 @@ TEST_CASE("parseArgs Test", "[utils][stringutils]") {
     CHECK(map["i"] == "123");
 }
 
+TEST_CASE("buf2s Test", "[utils][stringutils]") {
+
+    std::stringstream ss("hoge");
+    CHECK("hoge" == Yacko::Utils::buf2s(ss.rdbuf()));
+}
+
+TEST_CASE("as2s Test", "[utils][stringutils]") {
+
+    Aws::String as("hoge");
+    std::string s("hoge");
+    CHECK(s == Yacko::Utils::as2s(as));
+}
+
