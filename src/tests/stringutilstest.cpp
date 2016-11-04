@@ -11,7 +11,7 @@ TEST_CASE("parseUri Test", "[utils][stringutils]") {
 
 TEST_CASE("parseArgs Test", "[utils][stringutils]") {
 
-    std::map<std::string, std::string> map = Yacko::Utils::parseArgs(std::string("?a=b&cde=fgh&i=123"));
+    std::map<std::string, std::string> map = Yacko::Utils::parseArgs(std::string("a=b&cde=fgh&i=123"));
     CHECK(map["a"] == "b");
     CHECK(map["cde"] == "fgh");
     CHECK(map["i"] == "123");
