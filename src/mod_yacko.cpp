@@ -42,9 +42,8 @@ static int yacko_handler(request_rec *r)
     try {
         yacko_config *conf = reinterpret_cast<yacko_config*>(ap_get_module_config(r->server->module_config, &yacko_module));
         std::map<std::string, std::string> map = Yacko::Utils::parseUri(std::string(r->uri));
-        std::string checksum = Yacko::Utils::sha256(reinterpret_cast<const unsigned char*>(( map["bucket"] + map["objectkey"] + *(conf->sha256secretkey)).c_str()));
         std::map<std::string, std::string> params = Yacko::Utils::parseArgs(std::string(r->args));
-        if (checksum != params["checksum"]) {
+        if (Yacko::Utils::sha256(map["bucket"] + map["objectkey"] + *(conf->sha256secretkey)) != params["checksum"]) {
             throw Yacko::bad_request("invalid checksum");
         }
         std::string data = Yacko::S3::getObject(r, map["bucket"], map["objectkey"]);
