@@ -34,7 +34,7 @@ namespace Yacko {
             config.region = Aws::Region::AP_NORTHEAST_1;
             conf->s3client = Aws::MakeShared < Aws::S3::S3Client > (ALLOCATION_TAG, Aws::Auth::AWSCredentials(*(conf->aws_accesskey_id), *(conf->aws_secretaccess_key)), config);
             if (!(conf->s3client)) {
-                throw Yacko::INTERNAL_SERVER_ERROR("init S3Client failed");
+                throw Yacko::INTERNAL_SERVER_ERROR("S3Client init failed");
             }
 
             return conf->s3client;
