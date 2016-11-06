@@ -1,4 +1,3 @@
-#define CATCH_CONFIG_MAIN
 #include "yacko/utils/stringutils.h"
 #include "Catch/include/catch.hpp"
 
