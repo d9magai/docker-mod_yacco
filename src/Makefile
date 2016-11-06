@@ -21,6 +21,7 @@ APXS_SYSCONFDIR=`$(APXS) -q SYSCONFDIR`
 APXS_LIBS_SHLIB=`$(APXS) -q LIBS_SHLIB`
 
 OBJ = mod_yacko.o getobject.o stringutils.o
+TEST_OBJ = test.o  stringutils.o
 
 #   the default target
 all: mod_yacko.so
@@ -48,7 +49,7 @@ install: all
 	$(APXS) -i -a -n 'yacko' mod_yacko.so
 
 testscript : test.o stringutils.o
-	g++ -o $@ $(APXS_LIBS_SHLIB) test.o stringutils.o -L/opt/awssdkcpp/lib/ -lcrypto -laws-cpp-sdk-core
+	g++ -o $@ $(TEST_OBJ) $(APXS_LIBS_SHLIB) -L/opt/awssdkcpp/lib/ -lcrypto -laws-cpp-sdk-core
 test: testscript 
 	./testscript
 
