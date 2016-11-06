@@ -1,5 +1,5 @@
 /*
- * module_config_struct.h
+ * mod_config.h
  */
 
 #pragma once
@@ -8,7 +8,7 @@
 #include <aws/core/utils/StringUtils.h>
 
 namespace Yacko {
-    struct yacko_config
+    struct mod_config
     {
         std::shared_ptr<std::string> sha256secretkey;
         std::shared_ptr<Aws::String> aws_accesskey_id;
