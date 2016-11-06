@@ -21,6 +21,7 @@ APXS_SYSCONFDIR=`$(APXS) -q SYSCONFDIR`
 APXS_LIBS_SHLIB=`$(APXS) -q LIBS_SHLIB`
 
 OBJ = mod_yacko.o getobject.o stringutils.o
+TEST_OBJ = test.o  stringutils.o
 
 #   the default target
 all: mod_yacko.so
@@ -36,14 +37,22 @@ getobject.o: yacko/s3/getobject.cpp
 	g++ -c -fPIC -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -I. -Wall -o $@ $< 
 stringutils.o: yacko/utils/stringutils.cpp
 	g++ -c -fPIC -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -I. -Wall -o $@ $< 
+test.o: test/test.cpp
+	g++ -c -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -I. -Wall -o $@ $< 
 
 # link
-mod_yacko.so: mod_yacko.o getobject.o stringutils.o
+mod_yacko.so: $(OBJ)
 	g++ -fPIC -shared -o $@ $(OBJ) $(APXS_LIBS_SHLIB) -L/opt/awssdkcpp/lib/ -laws-cpp-sdk-core -laws-cpp-sdk-s3
 
 # install the shared object file into Apache 
 install: all
 	$(APXS) -i -a -n 'yacko' mod_yacko.so
+
+# test
+testscript : $(TEST_OBJ)
+	g++ -o $@ $(TEST_OBJ) $(APXS_LIBS_SHLIB) -L/opt/awssdkcpp/lib/ -lcrypto -laws-cpp-sdk-core
+test: testscript 
+	./testscript
 
 # display the apxs variables
 check_apxs_vars:
@@ -61,7 +70,7 @@ check_apxs_vars:
 
 #   cleanup
 clean:
-	-rm -f *.so *.o *~
+	-rm -f *.so *.o *~ ./testscript
 
 #   install and activate shared object by reloading Apache to
 #   force a reload of the shared object file
