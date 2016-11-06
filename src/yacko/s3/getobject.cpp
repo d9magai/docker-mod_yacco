@@ -22,7 +22,7 @@ namespace Yacko {
         std::shared_ptr<Aws::S3::S3Client> getS3Client(request_rec *r)
         {
 
-            yacko_config *conf = reinterpret_cast<yacko_config*>(ap_get_module_config(r->server->module_config, &yacko_module));
+            Yacko::yacko_config *conf = reinterpret_cast<Yacko::yacko_config*>(ap_get_module_config(r->server->module_config, &yacko_module));
             if (conf->s3client) {
                 return conf->s3client;
             }
