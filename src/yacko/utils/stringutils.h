@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <openssl/sha.h>
 #include <aws/core/utils/StringUtils.h>
-#include "common.h"
+#include "yacko/common.h"
 
 namespace Yacko {
     namespace Utils {

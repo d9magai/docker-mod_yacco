@@ -3,9 +3,9 @@
 #include <httpd/http_protocol.h>
 #include <httpd/http_log.h>
 #include "yacko/s3/getobject.h"
-#include "module_config_struct.h"
+#include "yacko/module_config_struct.h"
 #include "yacko/serverexception.h"
-#include "common.h"
+#include "yacko/common.h"
 #include "yacko/utils/stringutils.h"
 #include <aws/core/Aws.h>
 
