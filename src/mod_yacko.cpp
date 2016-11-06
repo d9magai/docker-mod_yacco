@@ -1,7 +1,7 @@
-#include <httpd.h>
+#include <httpd/httpd.h>
 #include "http_config.h"
-#include <http_protocol.h>
-#include <http_log.h>
+#include <httpd/http_protocol.h>
+#include <httpd/http_log.h>
 #include "yacko/s3/getobject.h"
 #include "module_config_struct.h"
 #include "yacko/serverexception.h"
