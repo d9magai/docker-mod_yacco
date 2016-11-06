@@ -37,7 +37,7 @@ getobject.o: yacko/s3/getobject.cpp
 stringutils.o: yacko/utils/stringutils.cpp
 	g++ -c -fPIC -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -I. -Wall -o $@ $< 
 test.o: test/test.cpp
-	g++ -c -O2 -std=c++11 -DAWS_CUSTOM_MEMORY_MANAGEMENT test/test.cpp -I. -I/opt/awssdkcpp/include/
+	g++ -c -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -I. -Wall -o $@ $< 
 
 # link
 mod_yacko.so: mod_yacko.o getobject.o stringutils.o
@@ -48,7 +48,7 @@ install: all
 	$(APXS) -i -a -n 'yacko' mod_yacko.so
 
 testscript : test.o stringutils.o
-	g++ -o $@ test.o stringutils.o -L/opt/awssdkcpp/lib/ -lcrypto -laws-cpp-sdk-core
+	g++ -o $@ $(APXS_LIBS_SHLIB) test.o stringutils.o -L/opt/awssdkcpp/lib/ -lcrypto -laws-cpp-sdk-core
 test: testscript 
 	./testscript
 
