@@ -6,7 +6,7 @@
 #undef OK
 #undef HTTP_VERSION_NOT_SUPPORTED
 #include "http_config.h"
-#include "yacko/module_config_struct.h"
+#include "yacko/mod_config.h"
 #include "yacko/serverexception.h"
 #include "yacko/common.h"
 #include "yacko/utils/stringutils.h"
