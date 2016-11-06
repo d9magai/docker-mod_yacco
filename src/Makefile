@@ -47,8 +47,10 @@ mod_yacko.so: mod_yacko.o getobject.o stringutils.o
 install: all
 	$(APXS) -i -a -n 'yacko' mod_yacko.so
 
-unittest: test.o stringutils.o
-	g++ -o unittests tests.o stringutils.o -L/opt/awssdkcpp/lib/ -lcrypto -laws-cpp-sdk-core
+testscript : test.o stringutils.o
+	g++ -o $@ test.o stringutils.o -L/opt/awssdkcpp/lib/ -lcrypto -laws-cpp-sdk-core
+test: testscript 
+	./testscript
 
 # display the apxs variables
 check_apxs_vars:
