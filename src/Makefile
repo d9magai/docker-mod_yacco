@@ -48,6 +48,7 @@ mod_yacko.so: $(OBJ)
 install: all
 	$(APXS) -i -a -n 'yacko' mod_yacko.so
 
+# test
 testscript : $(TEST_OBJ)
 	g++ -o $@ $(TEST_OBJ) $(APXS_LIBS_SHLIB) -L/opt/awssdkcpp/lib/ -lcrypto -laws-cpp-sdk-core
 test: testscript 
