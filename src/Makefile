@@ -41,14 +41,14 @@ test.o: test/test.cpp
 	g++ -c -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -I. -Wall -o $@ $< 
 
 # link
-mod_yacko.so: mod_yacko.o getobject.o stringutils.o
+mod_yacko.so: $(OBJ)
 	g++ -fPIC -shared -o $@ $(OBJ) $(APXS_LIBS_SHLIB) -L/opt/awssdkcpp/lib/ -laws-cpp-sdk-core -laws-cpp-sdk-s3
 
 # install the shared object file into Apache 
 install: all
 	$(APXS) -i -a -n 'yacko' mod_yacko.so
 
-testscript : test.o stringutils.o
+testscript : $(TEST_OBJ)
 	g++ -o $@ $(TEST_OBJ) $(APXS_LIBS_SHLIB) -L/opt/awssdkcpp/lib/ -lcrypto -laws-cpp-sdk-core
 test: testscript 
 	./testscript
