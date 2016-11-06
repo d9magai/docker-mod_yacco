@@ -69,7 +69,7 @@ check_apxs_vars:
 
 #   cleanup
 clean:
-	-rm -f *.so *.o *~
+	-rm -f *.so *.o *~ ./testscript
 
 #   install and activate shared object by reloading Apache to
 #   force a reload of the shared object file
