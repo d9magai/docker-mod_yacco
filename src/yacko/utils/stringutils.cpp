@@ -61,6 +61,11 @@ namespace Yacko {
             }
             return ss.str();
         }
+
+        bool isEnabledImgExt(const std::string &ext)
+        {
+
+            return Yacko::Utils::enabledExtset.find(ext) != Yacko::Utils::enabledExtset.end();
+        }
     }
 }
-
