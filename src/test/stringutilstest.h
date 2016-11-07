@@ -34,3 +34,13 @@ TEST_CASE("sha256 Test", "[utils][stringutils]") {
     std::string str = "The quick brown fox jumps over the lazy dog";
     CHECK("d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592" == Yacko::Utils::sha256(str));
 }
+
+TEST_CASE("isEnabledImgExt Test", "[utils][stringutils]") {
+
+    CHECK(Yacko::Utils::isEnabledImgExt("JPG"));
+    CHECK(Yacko::Utils::isEnabledImgExt("GIF"));
+    CHECK(Yacko::Utils::isEnabledImgExt("PNG"));
+    CHECK(Yacko::Utils::isEnabledImgExt("BMP"));
+    CHECK(!Yacko::Utils::isEnabledImgExt("TIF"));
+    CHECK(!Yacko::Utils::isEnabledImgExt("SVG"));
+}
