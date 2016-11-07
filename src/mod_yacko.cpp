@@ -8,6 +8,7 @@
 #include "yacko/common.h"
 #include "yacko/utils/stringutils.h"
 #include <aws/core/Aws.h>
+#include <ImageMagick/Magick++.h> 
 
 extern "C" module AP_MODULE_DECLARE_DATA yacko_module;
 
@@ -46,7 +47,13 @@ static int yacko_handler(request_rec *r)
         if (Yacko::Utils::sha256(std::string(map["bucket"] + map["objectkey"] + *(conf->sha256secretkey))) != params["checksum"]) {
             throw Yacko::BAD_REQUEST("invalid checksum");
         }
+
         std::string data = Yacko::S3::getObject(r, map["bucket"], map["objectkey"]);
+        Magick::Image image(Magick::Blob(data.c_str(), data.length())); 
+        std::string type = image.magick();
+        if (!Yacko::Utils::isEnabledImgType(type)) {
+            throw Yacko::BAD_REQUEST("unenabled image type");
+        }
 
         apr_bucket *bucket = apr_bucket_pool_create(data.c_str(), data.length(), r->pool, r->connection->bucket_alloc);
         apr_bucket_brigade *bucket_brigate = apr_brigade_create(r->pool, r->connection->bucket_alloc);
