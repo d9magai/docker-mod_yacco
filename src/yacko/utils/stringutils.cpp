@@ -61,6 +61,11 @@ namespace Yacko {
             }
             return ss.str();
         }
+
+        bool isEnabledImgType(const std::string &type)
+        {
+
+            return Yacko::Utils::enabledTypeSet.find(type) != Yacko::Utils::enabledTypeSet.end();
+        }
     }
 }
-
