@@ -37,7 +37,7 @@ TEST_CASE("sha256 Test", "[utils][stringutils]") {
 
 TEST_CASE("isEnabledImgType Test", "[utils][stringutils]") {
 
-    CHECK(Yacko::Utils::isEnabledImgType("JPG"));
+    CHECK(Yacko::Utils::isEnabledImgType("JPEG"));
     CHECK(Yacko::Utils::isEnabledImgType("GIF"));
     CHECK(Yacko::Utils::isEnabledImgType("PNG"));
     CHECK(Yacko::Utils::isEnabledImgType("BMP"));

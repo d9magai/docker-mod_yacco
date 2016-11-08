@@ -23,6 +23,8 @@ APXS_LIBS_SHLIB=`$(APXS) -q LIBS_SHLIB`
 OBJ = mod_yacko.o getobject.o stringutils.o
 TEST_OBJ = test.o  stringutils.o
 
+CFLAGS = -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -I. -I/usr/include/ImageMagick/
+
 #   the default target
 all: mod_yacko.so
 
@@ -32,17 +34,17 @@ all: mod_yacko.so
 
 # compile
 mod_yacko.o: mod_yacko.cpp
-	g++ -c -fPIC -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -I. -Wall -o $@ $<
+	g++ -c -fPIC -std=c++11 $(CFLAGS) -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $<
 getobject.o: yacko/s3/getobject.cpp
-	g++ -c -fPIC -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -I. -Wall -o $@ $< 
+	g++ -c -fPIC -std=c++11 $(CFLAGS) -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $< 
 stringutils.o: yacko/utils/stringutils.cpp
-	g++ -c -fPIC -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -I. -Wall -o $@ $< 
+	g++ -c -fPIC -std=c++11 $(CFLAGS) -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $< 
 test.o: test/test.cpp
-	g++ -c -std=c++11 -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -DAWS_CUSTOM_MEMORY_MANAGEMENT -I. -Wall -o $@ $< 
+	g++ -c -fPIC -std=c++11 $(CFLAGS) -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $< 
 
 # link
 mod_yacko.so: $(OBJ)
-	g++ -fPIC -shared -o $@ $(OBJ) $(APXS_LIBS_SHLIB) -L/opt/awssdkcpp/lib/ -laws-cpp-sdk-core -laws-cpp-sdk-s3
+	g++ -fPIC -shared -o $@ $(OBJ) $(APXS_LIBS_SHLIB) -L/opt/awssdkcpp/lib/ -laws-cpp-sdk-core -laws-cpp-sdk-s3 -lMagick++ -lMagickCore
 
 # install the shared object file into Apache 
 install: all

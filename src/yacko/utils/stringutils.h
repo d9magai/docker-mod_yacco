@@ -14,7 +14,7 @@ namespace Yacko {
 
         const std::set<std::string> enabledTypeSet
             {
-            "JPG",
+            "JPEG",
             "GIF",
             "PNG",
             "BMP"
