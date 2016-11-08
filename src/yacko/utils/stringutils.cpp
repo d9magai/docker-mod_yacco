@@ -1,3 +1,4 @@
+#include <iostream>
 #include "stringutils.h"
 
 namespace Yacko {
@@ -20,9 +21,27 @@ namespace Yacko {
         std::map<std::string, std::string> parseUri(std::string uri)
         {
 
-            std::string path = std::string(uri).substr(Yacko::HANDLER_NAME.length() + 2);
-            int slashpos = path.find_first_of('/');
+            std::string path = std::string(uri).substr(1);
+            size_t slashpos = path.find_first_of('/');
             std::map<std::string, std::string> map;
+            std::string args = path.substr(0, slashpos);
+
+            args = args.substr(Yacko::HANDLER_NAME.length() + 1);
+            args = args.substr(0, args.length() - 1);
+            std::stringstream querystringss(args);
+            std::string param;
+            while(std::getline(querystringss, param, ',')) {
+                std::string buf;
+                std::string key;
+                std::stringstream paramss(param);
+                std::getline(paramss, buf, '=');
+                key = buf;
+                std::getline(paramss, buf);
+                map[key] = buf;
+            }
+
+            path = path.substr(slashpos + 1);
+            slashpos = path.find_first_of('/');
             map["bucket"] = path.substr(0, slashpos);
             map["objectkey"] = path.substr(slashpos + 1);
 
