@@ -1,13 +1,20 @@
 #include "yacko/utils/stringutils.h"
 #include "Catch/include/catch.hpp"
 
-TEST_CASE("parseUri Test", "[utils][stringutils]") {
+TEST_CASE("parseUri Test1", "[utils][stringutils]") {
 
     std::map<std::string, std::string> map = Yacko::Utils::parseUri(std::string("/yacko(w=100,h=200)/bucket/path/to/object"));
     CHECK(map["bucket"] == "bucket");
     CHECK(map["objectkey"] == "path/to/object");
     CHECK(map["w"] == "100");
     CHECK(map["h"] == "200");
+}
+
+TEST_CASE("parseUri Test2", "[utils][stringutils]") {
+
+    std::map<std::string, std::string> map = Yacko::Utils::parseUri(std::string("/yacko()/bucket/path/to/object"));
+    CHECK(map["bucket"] == "bucket");
+    CHECK(map["objectkey"] == "path/to/object");
 }
 
 TEST_CASE("parseArgs Test", "[utils][stringutils]") {
