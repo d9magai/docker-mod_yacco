@@ -66,16 +66,16 @@ namespace Yacko {
         {
 
             std::vector<std::string> vec = Yacko::Utils::pregUri(uri);
-            std::string path = vec[2];
+            std::string path = vec[Yacko::S3_OBJECT_PATH_NUM];
             int slashpos = path.find_first_of('/');
             std::map<std::string, std::string> map;
             map["bucket"] = path.substr(0, slashpos);
             map["objectkey"] = path.substr(slashpos + 1);
-            if (vec[1] == "") {
+            if (vec[LOCATION_PARAMETERS_NUM] == "") {
                 return map;
             }
 
-            return Yacko::Utils::str2map(map, vec[1].substr(1, vec[1].length() - 2), ',');
+            return Yacko::Utils::str2map(map, vec[LOCATION_PARAMETERS_NUM].substr(1, vec[LOCATION_PARAMETERS_NUM].length() - 2), ',');
         }
 
         std::map<std::string, std::string> parseArgs(std::string args)
