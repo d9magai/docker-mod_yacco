@@ -55,7 +55,21 @@ namespace Yacko {
             std::map<std::string, std::string> map;
             map["bucket"] = path.substr(0, slashpos);
             map["objectkey"] = path.substr(slashpos + 1);
+            if (vec[1] == "") {
+                return map;
+            }
 
+            std::stringstream src(vec[1].substr(1, vec[1].length() - 2));
+            std::string param;
+            while(std::getline(src, param, ',')) {
+                std::string buf;
+                std::string key;
+                std::stringstream paramss(param);
+                std::getline(paramss, buf, '=');
+                key = buf;
+                std::getline(paramss, buf);
+                map[key] = buf;
+            }
             return map;
         }
 
