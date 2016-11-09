@@ -1,6 +1,22 @@
 #include "yacko/utils/stringutils.h"
 #include "Catch/include/catch.hpp"
 
+TEST_CASE("pregUri Test", "[utils][stringutils]") {
+
+    std::vector<std::string> vec = Yacko::Utils::pregUri(std::string("/yacko(w=100,h=200)/bucket/path/to/object"));
+    CHECK(vec[0] == "/yacko(w=100,h=200)/bucket/path/to/object");
+    CHECK(vec[1] == "(w=100,h=200)");
+    CHECK(vec[2] == "bucket/path/to/object");
+    vec = Yacko::Utils::pregUri(std::string("/yacko()/bucket/path/to/object"));
+    CHECK(vec[0] == "/yacko()/bucket/path/to/object");
+    CHECK(vec[1] == "()");
+    CHECK(vec[2] == "bucket/path/to/object");
+    vec = Yacko::Utils::pregUri(std::string("/yacko/bucket/path/to/object"));
+    CHECK(vec[0] == "/yacko/bucket/path/to/object");
+    CHECK(vec[1] == "");
+    CHECK(vec[2] == "bucket/path/to/object");
+}
+
 TEST_CASE("parseUri Test", "[utils][stringutils]") {
 
     std::map<std::string, std::string> map = Yacko::Utils::parseUri(std::string("/yacko/bucket/path/to/object"));
