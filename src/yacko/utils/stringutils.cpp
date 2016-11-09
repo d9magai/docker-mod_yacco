@@ -17,35 +17,72 @@ namespace Yacko {
             return ss.str();
         }
 
-        std::map<std::string, std::string> parseUri(std::string uri)
+        std::vector<std::string> pregUri(const std::string& uri)
         {
+            regex_t preg;
+            if (regcomp(&preg, Yacko::LOCATION_MATCH_REGEX.c_str(), REG_EXTENDED|REG_NEWLINE) != 0) {
+                throw Yacko::INTERNAL_SERVER_ERROR("regex compile failed.");
+            }
 
-            std::string path = std::string(uri).substr(Yacko::HANDLER_NAME.length() + 2);
-            int slashpos = path.find_first_of('/');
-            std::map<std::string, std::string> map;
-            map["bucket"] = path.substr(0, slashpos);
-            map["objectkey"] = path.substr(slashpos + 1);
+            const char *str = uri.c_str();
+            size_t nmatch = 3;
+            regmatch_t pmatch[3];
+            if (regexec(&preg, str, nmatch, pmatch, 0) != 0) {
+                throw Yacko::BAD_REQUEST("no match.");
+            }
 
-            return map;
+            std::vector<std::string> vec;
+            for (size_t i = 0; i < nmatch; i++) {
+                std::stringstream ss;
+                if (pmatch[i].rm_so >= 0 && pmatch[i].rm_eo >= 0) {
+                    for (int j = pmatch[i].rm_so; j < pmatch[i].rm_eo; j++) {
+                        ss << str[j];
+                    }
+                }
+                vec.push_back(ss.str());
+            }
+            regfree(&preg);
+
+            return vec;
         }
 
-        std::map<std::string, std::string> parseArgs(std::string args)
+        std::map<std::string, std::string> str2map(std::map<std::string, std::string> map, const std::string& str, const char delimiter)
         {
 
-            std::map<std::string, std::string> map;
-            std::stringstream querystringss(args);
-            std::string param;
-            while(std::getline(querystringss, param, '&')) {
-                std::string buf;
-                std::string key;
+            std::stringstream source(str);
+            std::string param, key, buf;
+            while (std::getline(source, param, delimiter)) {
                 std::stringstream paramss(param);
                 std::getline(paramss, buf, '=');
                 key = buf;
                 std::getline(paramss, buf);
                 map[key] = buf;
             }
-
             return map;
+        }
+
+
+        std::map<std::string, std::string> parseUri(std::string uri)
+        {
+
+            std::vector<std::string> vec = Yacko::Utils::pregUri(uri);
+            std::string path = vec[Yacko::S3_OBJECT_PATH_NUM];
+            int slashpos = path.find_first_of('/');
+            std::map<std::string, std::string> map;
+            map["bucket"] = path.substr(0, slashpos);
+            map["objectkey"] = path.substr(slashpos + 1);
+            if (vec[LOCATION_PARAMETERS_NUM] == "") {
+                return map;
+            }
+
+            return Yacko::Utils::str2map(map, vec[LOCATION_PARAMETERS_NUM].substr(1, vec[LOCATION_PARAMETERS_NUM].length() - 2), ',');
+        }
+
+        std::map<std::string, std::string> parseArgs(std::string args)
+        {
+
+            std::map<std::string, std::string> map;
+            return Yacko::Utils::str2map(map, args, '&');
         }
 
         std::string sha256(std::string str)
