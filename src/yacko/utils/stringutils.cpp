@@ -17,6 +17,35 @@ namespace Yacko {
             return ss.str();
         }
 
+        std::vector<std::string> pregUri(const std::string& uri)
+        {
+            regex_t preg;
+            if (regcomp(&preg, Yacko::LOCATION_MATCH_REGEX.c_str(), REG_EXTENDED|REG_NEWLINE) != 0) {
+                throw Yacko::INTERNAL_SERVER_ERROR("regex compile failed.");
+            }
+
+            const char *str = uri.c_str();
+            size_t nmatch = 3;
+            regmatch_t pmatch[3];
+            if (regexec(&preg, str, nmatch, pmatch, 0) != 0) {
+                throw Yacko::BAD_REQUEST("no match.");
+            }
+
+            std::vector<std::string> vec;
+            for (size_t i = 0; i < nmatch; i++) {
+                std::stringstream ss;
+                if (pmatch[i].rm_so >= 0 && pmatch[i].rm_eo >= 0) {
+                    for (int j = pmatch[i].rm_so; j < pmatch[i].rm_eo; j++) {
+                        ss << str[j];
+                    }
+                }
+                vec.push_back(ss.str());
+            }
+            regfree(&preg);
+
+            return vec;
+        }
+
         std::map<std::string, std::string> parseUri(std::string uri)
         {
 
