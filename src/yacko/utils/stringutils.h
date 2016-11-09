@@ -24,6 +24,7 @@ namespace Yacko {
 
         std::string buf2s(std::basic_streambuf<char>* buf);
         std::string as2s(const Aws::String& as);
+        std::map<std::string, std::string> str2map(std::map<std::string, std::string> map, const std::string& str, const char delimiter);
         std::vector<std::string> pregUri(const std::string& uri);
         std::map<std::string, std::string> parseUri(std::string uri);
         std::map<std::string, std::string> parseArgs(std::string args);

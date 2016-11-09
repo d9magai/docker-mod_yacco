@@ -46,6 +46,22 @@ namespace Yacko {
             return vec;
         }
 
+        std::map<std::string, std::string> str2map(std::map<std::string, std::string> map, const std::string& str, const char delimiter)
+        {
+
+            std::stringstream source(str);
+            std::string param, key, buf;
+            while (std::getline(source, param, delimiter)) {
+                std::stringstream paramss(param);
+                std::getline(paramss, buf, '=');
+                key = buf;
+                std::getline(paramss, buf);
+                map[key] = buf;
+            }
+            return map;
+        }
+
+
         std::map<std::string, std::string> parseUri(std::string uri)
         {
 
@@ -59,37 +75,14 @@ namespace Yacko {
                 return map;
             }
 
-            std::stringstream src(vec[1].substr(1, vec[1].length() - 2));
-            std::string param;
-            while(std::getline(src, param, ',')) {
-                std::string buf;
-                std::string key;
-                std::stringstream paramss(param);
-                std::getline(paramss, buf, '=');
-                key = buf;
-                std::getline(paramss, buf);
-                map[key] = buf;
-            }
-            return map;
+            return Yacko::Utils::str2map(map, vec[1].substr(1, vec[1].length() - 2), ',');
         }
 
         std::map<std::string, std::string> parseArgs(std::string args)
         {
 
             std::map<std::string, std::string> map;
-            std::stringstream querystringss(args);
-            std::string param;
-            while(std::getline(querystringss, param, '&')) {
-                std::string buf;
-                std::string key;
-                std::stringstream paramss(param);
-                std::getline(paramss, buf, '=');
-                key = buf;
-                std::getline(paramss, buf);
-                map[key] = buf;
-            }
-
-            return map;
+            return Yacko::Utils::str2map(map, args, '&');
         }
 
         std::string sha256(std::string str)
