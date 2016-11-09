@@ -49,7 +49,8 @@ namespace Yacko {
         std::map<std::string, std::string> parseUri(std::string uri)
         {
 
-            std::string path = std::string(uri).substr(Yacko::HANDLER_NAME.length() + 2);
+            std::vector<std::string> vec = Yacko::Utils::pregUri(uri);
+            std::string path = vec[2];
             int slashpos = path.find_first_of('/');
             std::map<std::string, std::string> map;
             map["bucket"] = path.substr(0, slashpos);
