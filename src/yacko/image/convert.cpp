@@ -16,5 +16,10 @@ namespace Yacko {
             image.write(&blob);
             return blob;
         }
+
+        std::string getOutputFormat(std::map<std::string, std::string> map, std::string basetype)
+        {
+            return map.count("of") != 0 ? map["of"] : basetype;
+        }
     }
 }
