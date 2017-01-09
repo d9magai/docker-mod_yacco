@@ -20,7 +20,7 @@ APXS_LDFLAGS_SHLIB=`$(APXS) -q LDFLAGS_SHLIB`
 APXS_SYSCONFDIR=`$(APXS) -q SYSCONFDIR`
 APXS_LIBS_SHLIB=`$(APXS) -q LIBS_SHLIB`
 
-OBJ = mod_yacko.o getobject.o stringutils.o
+OBJ = mod_yacko.o getobject.o stringutils.o convert.o
 TEST_OBJ = test.o  stringutils.o
 
 CFLAGS = -I/usr/include/apr-1.0/ -I/usr/include/apr-1/ -I$(APXS_INCLUDEDIR) $(APXS_CFLAGS) $(APXS_CFLAGS_SHLIB) -I/opt/awssdkcpp/include/ -I. -I/usr/include/ImageMagick/
@@ -39,6 +39,8 @@ getobject.o: yacko/s3/getobject.cpp
 	g++ -c -fPIC -std=c++11 $(CFLAGS) -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $< 
 stringutils.o: yacko/utils/stringutils.cpp
 	g++ -c -fPIC -std=c++11 $(CFLAGS) -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $< 
+convert.o: yacko/image/convert.cpp
+	g++ -c -fPIC -std=c++11 $(CFLAGS) -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $<
 test.o: test/test.cpp
 	g++ -c -fPIC -std=c++11 $(CFLAGS) -DAWS_CUSTOM_MEMORY_MANAGEMENT -Wall -o $@ $< 
 
