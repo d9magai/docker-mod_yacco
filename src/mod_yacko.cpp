@@ -51,17 +51,17 @@ static int yacko_handler(request_rec *r)
 
         std::string data = Yacko::S3::getObject(r, map["bucket"], map["objectkey"]);
         Magick::Image image(Magick::Blob(data.c_str(), data.length())); 
-        std::string type = image.magick();
-        if (!Yacko::Utils::isEnabledImgType(type)) {
+        std::string basetype = image.magick();
+        if (!Yacko::Utils::isEnabledImgType(basetype)) {
             throw Yacko::BAD_REQUEST("unenabled image type");
         }
 
-        Magick::Blob blob = Yacko::Image::resize(map, image);
+        Magick::Blob blob = Yacko::Image::resize(map, image, basetype);
 
         apr_bucket *bucket = apr_bucket_pool_create(reinterpret_cast<const char*>(blob.data()), blob.length(), r->pool, r->connection->bucket_alloc);
         apr_bucket_brigade *bucket_brigate = apr_brigade_create(r->pool, r->connection->bucket_alloc);
         APR_BRIGADE_INSERT_TAIL(bucket_brigate, bucket);
-        ap_set_content_type(r, "image/jpg");
+        ap_set_content_type(r, Yacko::Utils::getMimetype(Yacko::Image::getOutputFormat(map, basetype)).c_str());
         ap_set_content_length(r, blob.length());
         ap_pass_brigade(r->output_filters, bucket_brigate);
 
