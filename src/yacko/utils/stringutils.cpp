@@ -104,5 +104,21 @@ namespace Yacko {
 
             return Yacko::Utils::enabledTypeSet.find(type) != Yacko::Utils::enabledTypeSet.end();
         }
+
+        std::string getMimetype(const std::string &type)
+        {
+
+            std::string ret = "";
+            if (type == "JPEG") {
+                ret = "image/jpeg";
+            } else if (type == "GIF") {
+                ret = "image/gif";
+            } else if (type == "PNG") {
+                ret = "image/png";
+            } else if (type == "BMP") {
+                ret = "image/bmp";
+            }
+            return ret;
+        }
     }
 }

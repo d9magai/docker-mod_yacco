@@ -30,6 +30,7 @@ namespace Yacko {
         std::map<std::string, std::string> parseArgs(std::string args);
         std::string sha256(std::string str);
         bool isEnabledImgType(const std::string &type);
+        std::string getMimetype(const std::string &type);
     }
 }
 
