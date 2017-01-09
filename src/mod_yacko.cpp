@@ -7,6 +7,7 @@
 #include "yacko/serverexception.h"
 #include "yacko/common.h"
 #include "yacko/utils/stringutils.h"
+#include "yacko/image/convert.h"
 #include <aws/core/Aws.h>
 #include <ImageMagick/Magick++.h> 
 
@@ -55,14 +56,7 @@ static int yacko_handler(request_rec *r)
             throw Yacko::BAD_REQUEST("unenabled image type");
         }
 
-        int w = std::stoi(map["w"]);
-        int h = std::stoi(map["h"]);
-        Magick::Geometry newSize = Magick::Geometry(w, h);
-        newSize.aspect(false);
-        image.resize(newSize);
-        Magick::Blob blob; 
-        image.magick("JPEG");
-        image.write(&blob);
+        Magick::Blob blob = Yacko::Image::resize(map, image);
 
         apr_bucket *bucket = apr_bucket_pool_create(reinterpret_cast<const char*>(blob.data()), blob.length(), r->pool, r->connection->bucket_alloc);
         apr_bucket_brigade *bucket_brigate = apr_brigade_create(r->pool, r->connection->bucket_alloc);
